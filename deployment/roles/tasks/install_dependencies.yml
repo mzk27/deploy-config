@@ -1,0 +1,28 @@
+---
+- name: Install Dependencies
+  hosts: prod
+  become: yes
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install required packages
+      apt:
+        name:
+          - python3-pip
+          - python3-dev
+          - nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install virtualenv
+      pip:
+        name: virtualenv
+        state: present
+
+    - name: Create directory for Flask app
+      file:
+        path: /home/ubuntu/myFlaskApp
+        state: directory

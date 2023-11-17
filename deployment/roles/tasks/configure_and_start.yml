@@ -1,0 +1,34 @@
+---
+- name: Configure and Start
+  hosts: prod
+  become: yes
+  tasks:
+    - name: Setup virtual environment
+      command: "python3 -m venv /home/ubuntu/myFlaskApp/env"
+
+    - name: Activate virtual environment
+      command: "source /home/ubuntu/myFlaskApp/env/bin/activate"
+
+    - name: Install Flask and Gunicorn
+      pip:
+        requirements: /home/ubuntu/myFlaskApp/requirements_prod.txt
+
+    - name: Create WSGI entry point
+      copy:
+        content: |
+          from app import app
+          if __name__ == "__main__":
+              app.run()
+        dest: "/home/ubuntu/myFlaskApp/wsgi.py"
+
+    - name: Create Gunicorn systemd service
+      template:
+        src: templates/app.service.j2
+        dest: /etc/systemd/system/app.service
+      notify: Restart Gunicorn
+
+    - name: Configure Nginx
+      template:
+        src: templates/app.nginx.j2
+        dest: /etc/nginx/sites-available/app
+      notify: Restart Nginx

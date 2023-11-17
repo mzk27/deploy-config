@@ -1,0 +1,14 @@
+---
+- hosts: prod
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Include install_dependencies.yml
+      include_tasks: install_dependencies.yml
+
+    - name: Include copy_files.yml
+      include_tasks: copy_files.yml
+
+    - name: Include configure_and_start.yml
+      include_tasks: configure_and_start.yml

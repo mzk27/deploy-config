@@ -1,0 +1,20 @@
+---
+- name: Copy Files
+  hosts: prod
+  tasks:
+    - name: Copy files from Jenkins workspace
+      copy:
+        src: "/var/lib/jenkins/workspace/Flask_App/{{ item }}"
+        dest: "/home/ubuntu/myFlaskApp/{{ item }}"
+      with_items:
+        - app.py
+        - calculator.py
+        - static/styles.css
+        - templates/error.html
+        - templates/index.html
+        - templates/result.html
+
+    - name: Copy requirements file into prod server
+      copy:
+        src: "/var/lib/jenkins/workspace/Flask_App/deploy-config/requirements_prod.txt"
+        dest: "/home/ubuntu/myFlaskApp/requirements_prod.txt"

@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    server_name YOUR_SERVER_IP_OR_DOMAIN;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/path/to/your/myFlaskApp/app.sock;
+    }
+
+    location /static  {
+        include  /etc/nginx/mime.types;
+        root /path/to/your/myFlaskApp/;
+    }
+}
