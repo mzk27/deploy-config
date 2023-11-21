@@ -23,7 +23,7 @@
 
     - name: Copy files from Jenkins workspace
       ansible.builtin.copy:
-        src: "/var/lib/jenkins/workspace/Flask_App/{{ item }}"
+        src: "/var/lib/jenkins/workspace/flask_app/{{ item }}"
         dest: "/home/ubuntu/myFlaskApp/{{ item }}"
         owner: ubuntu
         group: ubuntu
@@ -38,7 +38,7 @@
 
     - name: Copy requirements file into prod server
       ansible.builtin.copy:
-        src: "/var/lib/jenkins/workspace/Flask_App/deploy-config/requirements_prod.txt"
+        src: "/var/lib/jenkins/workspace/flask_app/deploy-config/requirements_prod.txt"
         dest: "/home/ubuntu/myFlaskApp/requirements_prod.txt"
         owner: ubuntu
         group: ubuntu
