@@ -22,13 +22,13 @@
 
     - name: Create Gunicorn systemd service
       template:
-        src: "{{ playbook_dir }}/roles/flask_app/templates/app.service.j2"
+        src: "/var/lib/jenkins/workspace/Flask_App/deploy-config/deployment/roles/flask_app/templates/app.service.j2"
         dest: /etc/systemd/system/app.service
       notify: Restart Gunicorn
 
     - name: Configure Nginx
       template:
-        src: "{{ playbook_dir }}/roles/flask_app/templates/app.nginx.j2"
+        src: "/var/lib/jenkins/workspace/Flask_App/deploy-config/deployment/roles/flask_app/templates/app.nginx.j2"
         dest: /etc/nginx/sites-available/app
       notify: Restart Nginx
 
@@ -36,4 +36,9 @@
     - name: Restart Gunicorn
       systemd:
         name: app
+        state: restarted
+        
+    - name: Restart Nginx
+      systemd:
+        name: nginx
         state: restarted
