@@ -25,5 +25,8 @@
 
     - name: Create directory for Flask app
       file:
-        path: /home/ubuntu/myFlaskApp
+        path: "/home/ubuntu/myFlaskApp"
         state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
