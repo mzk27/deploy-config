@@ -1,9 +1,6 @@
----
 - name: Configure and Start
   hosts: prod
   become: yes
-  roles:
-    - flask_app
   tasks:
     - name: Setup virtual environment
       command: "python3 -m venv /home/ubuntu/myFlaskApp/env"
@@ -25,12 +22,18 @@
 
     - name: Create Gunicorn systemd service
       template:
-        src: flask_app/templates/app.service.j2
+        src: "{{ playbook_dir }}/roles/flask_app/templates/app.service.j2"
         dest: /etc/systemd/system/app.service
       notify: Restart Gunicorn
 
     - name: Configure Nginx
       template:
-        src: flask_app/templates/app.nginx.j2
+        src: "{{ playbook_dir }}/roles/flask_app/templates/app.nginx.j2"
         dest: /etc/nginx/sites-available/app
       notify: Restart Nginx
+
+  handlers:
+    - name: Restart Gunicorn
+      systemd:
+        name: app
+        state: restarted
