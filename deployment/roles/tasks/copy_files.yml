@@ -2,11 +2,33 @@
 - name: Copy Files
   hosts: prod
   tasks:
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+        path: /home/ubuntu/myFlaskApp
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Ensure subdirectories exist
+      ansible.builtin.file:
+        path: "/home/ubuntu/myFlaskApp/{{ item }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+      loop:
+        - static
+        - templates
+
     - name: Copy files from Jenkins workspace
-      copy:
+      ansible.builtin.copy:
         src: "/var/lib/jenkins/workspace/Flask_App/{{ item }}"
         dest: "/home/ubuntu/myFlaskApp/{{ item }}"
-      with_items:
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+      loop:
         - app.py
         - calculator.py
         - static/styles.css
@@ -15,6 +37,9 @@
         - templates/result.html
 
     - name: Copy requirements file into prod server
-      copy:
+      ansible.builtin.copy:
         src: "/var/lib/jenkins/workspace/Flask_App/deploy-config/requirements_prod.txt"
         dest: "/home/ubuntu/myFlaskApp/requirements_prod.txt"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
