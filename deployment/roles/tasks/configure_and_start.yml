@@ -7,7 +7,7 @@
       command: "python3 -m venv /home/ubuntu/myFlaskApp/env"
 
     - name: Activate virtual environment
-      shell: "source /home/ubuntu/myFlaskApp/env/bin/activate"
+      command: "bash -c 'source /home/ubuntu/myFlaskApp/env/bin/activate'"
 
     - name: Install Flask and Gunicorn
       pip:
